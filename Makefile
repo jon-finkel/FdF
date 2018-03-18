@@ -6,7 +6,7 @@
 #    By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/06 20:54:44 by nfinkel           #+#    #+#              #
-#    Updated: 2018/03/14 11:04:37 by nfinkel          ###   ########.fr        #
+#    Updated: 2018/03/18 10:53:46 by nfinkel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ OBJDIR :=					./build/
 SRC_DIR :=					./srcs/
 
 #	Sources
-SRC +=						main.c
+SRC +=						main.c misc.c
 
 OBJECTS =					$(patsubst %.c,$(OBJDIR)%.o,$(SRCS))
 

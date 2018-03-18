@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
+/*   misc.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/18 11:36:03 by nfinkel          ###   ########.fr       */
+/*   Created: 2018/03/18 10:57:20 by nfinkel           #+#    #+#             */
+/*   Updated: 2018/03/18 11:42:59 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
+#include "fdf.h"
 
-# include <fcntl.h>
-# include "libft.h"
-
-typedef struct		s_fdf
+void					vdtor(void *data)
 {
-	t_vec4			*vec;
-}					t_fdf;
+	ft_strdel((char **)data);
+}
 
-_Noreturn void		fdf_errhdl(const char *line, int x, int y);
-void				vdtor(void *data);
-
-#endif
+_Noreturn void			fdf_errhdl(const char *line, int x, int y)
+{
+	ft_dprintf(STDERR_FILENO, "fdf: parsing error, line[%d]: %s\n", y, line);
+	ft_dprintf(STDERR_FILENO, "%*.c{1c}%*s{eoc}\n", 28, ' ', x, "~^~");
+	exit(EXIT_FAILURE);
+}
