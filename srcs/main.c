@@ -6,13 +6,13 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/18 11:43:20 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/18 11:50:36 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static inline t_vec4			*map(int x, int y, int z)
+static inline t_vec4			*vec(int x, int y, int z)
 {
 	t_vec4		*vec;
 
@@ -37,7 +37,7 @@ static void						parse(t_fdf *fdf, t_vary *vary, char **file)
 		while (*s)
 		{
 			if (1)
-				*(t_vec4 **)ft_varypush(vary) = map(++p, k, ft_atoi(s));
+				*(t_vec4 **)ft_varypush(vary) = vec(++p, k, ft_atoi(s));
 			else
 				fdf_errhdl(file[k], s - file[k], k);
 		}
