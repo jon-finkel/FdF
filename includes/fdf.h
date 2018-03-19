@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/18 11:36:03 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/19 15:57:19 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,17 @@
 
 # include <fcntl.h>
 # include "libft.h"
+# include "mlx.h"
+
+# define _MLX fdf.mlx
 
 typedef struct		s_fdf
 {
-	t_vec4			*vec;
+	t_mlx			mlx;
+	t_vec4			**vec;
 }					t_fdf;
 
-_Noreturn void		fdf_errhdl(const char *line, int x, int y);
+_Noreturn void		fdf_errhdl(const char *line, int y);
 void				vdtor(void *data);
 
 #endif

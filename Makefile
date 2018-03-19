@@ -6,7 +6,7 @@
 #    By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/06 20:54:44 by nfinkel           #+#    #+#              #
-#    Updated: 2018/03/18 10:53:46 by nfinkel          ###   ########.fr        #
+#    Updated: 2018/03/19 16:03:50 by nfinkel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,11 +31,14 @@ endif
 
 HEADERS +=					-I ./includes/
 HEADERS +=					-I $(LIBFTH)
+HEADERS +=					-I $(LIBMLXH)
 O_FLAG :=					-O2
 
 #	Directories
 LIBFTDIR :=					./libft/
+LIBMLXDIR :=				./mlx/
 LIBFTH :=					$(LIBFTDIR)includes/
+LIBMLXH :=					$(LIBMLXDIR)
 OBJDIR :=					./build/
 
 SRC_DIR :=					./srcs/
@@ -53,10 +56,10 @@ vpath %.c $(SRC_DIR)
 ##    RULES    ##
 #################
 
-all: libft $(NAME)
+all: libft mlx $(NAME)
 
 $(NAME): $(OBJECTS)
-	@$(CC) $(DEBUG) $(FLAGS) $(O_FLAG) $(patsubst %.c,$(OBJDIR)%.o,$(notdir $(SRCS))) -L $(LIBFTDIR) -lft -o $@
+	@$(CC) $(DEBUG) $(FLAGS) $(O_FLAG) $(patsubst %.c,$(OBJDIR)%.o,$(notdir $(SRCS))) -L $(LIBFTDIR) -lft -L $(LIBMLXDIR) -lmlx -framework OpenGL -framework AppKit -o $@
 	@printf  "\033[92m\033[1:32mCompiling -------------> \033[91m$(NAME)\033[0m:\033[0m%-17s\033[32m[✔]\033[0m\n"
 
 $(OBJECTS): | $(OBJDIR)
@@ -85,11 +88,15 @@ fclean: clean
 libft:
 	@$(MAKE) -C $(LIBFTDIR)
 
+mlx:
+	@$(MAKE) -C $(LIBMLXDIR)
+
 noflags: FLAGS :=
 noflags: re
 
 purge: fclean
 	@$(MAKE) fclean -C $(LIBFTDIR)
+	@$(MAKE) clean -C $(LIBMLXDIR)
 
 re: fclean all
 
@@ -97,7 +104,7 @@ valgrind: DEBUG := -ggdb3
 valgrind: FLAGS :=
 valgrind: re
 
-.PHONY: all cat clean debug fclean libft noflags purge re valgrind
+.PHONY: all cat clean debug fclean libft mlx noflags purge re valgrind
 
 #################
 ##  WITH LOVE  ##
