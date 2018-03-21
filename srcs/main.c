@@ -6,12 +6,13 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/21 16:59:45 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/21 21:56:06 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+#define WIN_TITLE "FdF - A wireframe renderer, by Jon Finkel"
 #define WIN_X 1200
 #define WIN_Y 600
 
@@ -30,8 +31,8 @@ static void			parse(t_fdf *fdf, t_vary *vary, char **file)
 		while (*s)
 		{
 			z = ft_atoi(s);
-			*(t_vec4 **)ft_varypush(vary) = ft_vecnew((float)++p, (float)k,
-				(float)z);
+			*(t_vec4 **)ft_varypush(vary) = ft_vecnew((float)++p * 50,\
+				((float)k + (float)z) * 50, 0, 1);
 			s += ft_intlen(z);
 			if (!IS_WHITESPACE(*s))
 				fdf_errhdl(file[k], k);
@@ -40,7 +41,7 @@ static void			parse(t_fdf *fdf, t_vary *vary, char **file)
 		}
 		fdf->width = MAX(fdf->width, p + 1);
 	}
-	fdf->height = k + 1;
+	fdf->height = k;
 	fdf->vec = vary->buff;
 }
 
@@ -81,14 +82,14 @@ void			ft_bresenham2(t_mlx *mlx, t_vec4 *vec1, t_vec4 *vec2, int color)
 	int			y0;
 	t_brz		brz;
 
-	brz.dx = (float)ABS(vec1->x - vec2->x);
-	brz.dy = -(float)ABS(vec1->y - vec2->y);
+	brz.dx = ABS(vec1->x - vec2->x);
+	brz.dy = -ABS(vec1->y - vec2->y);
 	brz.derr = brz.dx + brz.dy;
 	brz.sx = (vec1->x < vec2->x ? 1 : -1);
 	brz.sy = (vec1->y < vec2->y ? 1 : -1);
-	x0 = vec1->x;
-	y0 = vec1->y;
-	while (x0 != vec2->x || y0 != vec2->y)
+	x0 = (int)vec1->x;
+	y0 = (int)vec1->y;
+	while (x0 != (int)vec2->x || y0 != (int)vec2->y)
 	{
 		mlx_pixel_put(mlx->mlx, mlx->win[0], x0, y0, color);
 		err = 2 * brz.derr;
@@ -99,11 +100,18 @@ void			ft_bresenham2(t_mlx *mlx, t_vec4 *vec1, t_vec4 *vec2, int color)
 	}
 }
 
-typedef void		(t_brzctor)(t_mlx *, t_vec4 *, t_vec4 *, int);
-
-static void			do_wireframe(t_fdf *fdf, t_mlx *mlx, (t_brzctor)brz)
+static void			do_wireframe(t_fdf fdf)
 {
-	;
+	int		k;
+
+	k = 0;
+	while (++k < fdf.width * fdf.height)
+	{
+		if (k % fdf.width)
+			ft_bresenham2(&_MLX, fdf.vec[k - 1], fdf.vec[k], 0xffffff);
+		if (k - fdf.width >= 0)
+			ft_bresenham2(&_MLX, fdf.vec[k - fdf.width], fdf.vec[k], 0xffffff);
+	}
 }
 
 int					main(int argc, const char *argv[])
@@ -115,7 +123,8 @@ int					main(int argc, const char *argv[])
 	ft_memset(&fdf, '\0', sizeof(t_fdf));
 	get_data(&fdf, open(argv[1], O_RDONLY));
 	ft_mlxinit(&_MLX);
-	ft_mlxaddwin(&_MLX, WIN_X, WIN_Y, "FdF");
+	ft_mlxaddwin(&_MLX, WIN_X, WIN_Y, WIN_TITLE);
+	do_wireframe(fdf);
 	mlx_loop(_MLX.mlx);
 	KTHXBYE;
 }
