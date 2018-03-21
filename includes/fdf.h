@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/19 15:57:19 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/20 21:05:05 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 typedef struct		s_fdf
 {
+	short			height;
+	short			width;
 	t_mlx			mlx;
 	t_vec4			**vec;
 }					t_fdf;
