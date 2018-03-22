@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/21 21:56:06 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/22 16:45:12 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ static void			parse(t_fdf *fdf, t_vary *vary, char **file)
 		while (*s)
 		{
 			z = ft_atoi(s);
-			*(t_vec4 **)ft_varypush(vary) = ft_vecnew((float)++p * 50,\
-				((float)k + (float)z) * 50, 0, 1);
+			*(t_vec4 **)ft_varypush(vary) = ft_vecroty(ft_vecnew((double)++p * 50, ((double)k + (double)z) * 50, 0, 1), 30.0);
 			s += ft_intlen(z);
 			if (!IS_WHITESPACE(*s))
 				fdf_errhdl(file[k], k);
@@ -68,8 +67,8 @@ static void			get_data(t_fdf *fdf, const int fd)
 
 typedef struct		s_brz
 {
-	float			dx;
-	float			dy;
+	double			dx;
+	double			dy;
 	int				derr;
 	int8_t			sx;
 	int8_t			sy;
