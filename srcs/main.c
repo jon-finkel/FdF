@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/22 16:45:12 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/23 17:31:15 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void			parse(t_fdf *fdf, t_vary *vary, char **file)
 		while (*s)
 		{
 			z = ft_atoi(s);
-			*(t_vec4 **)ft_varypush(vary) = ft_vecroty(ft_vecnew((double)++p * 50, ((double)k + (double)z) * 50, 0, 1), 30.0);
+			*(t_vec4 **)ft_varypush(vary) = ft_vecnew((double)++p * 50, (double)k * 50, (double)z * 50, 1);
 			s += ft_intlen(z);
 			if (!IS_WHITESPACE(*s))
 				fdf_errhdl(file[k], k);
