@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/23 23:39:44 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/24 19:39:57 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,19 +107,17 @@ static void			make_iso(t_fdf fdf)
 	t_m4		m2;
 
 	scale = WIN_Y / MAX(fdf.width, fdf.height);
-	ft_m4scale(&m2, scale, scale, scale);
-	ft_m4trans(&m1, (WIN_X - ((fdf.width - 1) * scale)) / 2,\
+	ft_m4scale(&m1, scale, scale, scale);
+	ft_m4trans(&m2, (WIN_X - ((fdf.width - 1) * scale)) / 2,\
 		(WIN_Y - ((fdf.height - 1) * scale)) / 2, 0);
-	ft_m4_m4(&m1, &m2);
-	ft_m4rotz(&m2, 3.14/4.0);
-		ft_printf("%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%d, %d, %d, %d\n", m2.a, m2.b, m2.c, m2.d, m2.e, m2.f, m2.g, m2.h, m2.i, m2.j, m2.k, m2.l, m2.m, m2.n, m2.o, m2.p);
+	ft_m4_m4(&m2, &m1);
+	ft_m4_iso(&m1);
+//	ft_printf("%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%d, %d, %d, %d\n", m2.a, m2.b, m2.c, m2.d, m2.e, m2.f, m2.g, m2.h, m2.i, m2.j, m2.k, m2.l, m2.m, m2.n, m2.o, m2.p);
 	k = -1;
 	while (++k < fdf.width * fdf.height)
 	{
-//		ft_m4_v4(&m1, fdf.vec[k]);
-		ft_printf("B = %f, %f, %f, %f\n", fdf.vec[k]->x, fdf.vec[k]->y, fdf.vec[k]->z, fdf.vec[k]->w);
-		ft_m4_v4(&m2, fdf.vec[k]);
-		ft_printf("A = %f, %f, %f, %f\n", fdf.vec[k]->x, fdf.vec[k]->y, fdf.vec[k]->z, fdf.vec[k]->w);
+//		ft_m4_v4(&m2, fdf.vec[k]);
+		ft_m4_v4(&m1, fdf.vec[k]);
 	}
 }
 
