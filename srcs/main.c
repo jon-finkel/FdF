@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/24 19:39:57 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/24 20:47:36 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #define WIN_Y 600
 #define WIN_TITLE "FdF - A wireframe renderer, by Jon Finkel"
 
-static void			parse(t_fdf *fdf, t_vary *vary, char **file)
+static void				parse(t_fdf *fdf, t_vary *vary, char **file)
 {
 	char		*s;
 	int			k;
@@ -33,7 +33,7 @@ static void			parse(t_fdf *fdf, t_vary *vary, char **file)
 			z = ft_atoi(s);
 			*(t_vec4 **)ft_varypush(vary) = ft_vecnew(++p, k, z, true);
 			s += ft_intlen(z);
-			if (!IS_WHITESPACE(*s))
+			if (*s && !IS_WHITESPACE(*s))
 				fdf_errhdl(file[k], k);
 			while (IS_WHITESPACE(*s))
 				++s;
@@ -44,7 +44,7 @@ static void			parse(t_fdf *fdf, t_vary *vary, char **file)
 	fdf->vec = vary->buff;
 }
 
-static void			get_data(t_fdf *fdf, const int fd)
+static void				get_data(t_fdf *fdf, const int fd)
 {
 	char		*line;
 	t_vary		file_null;
@@ -99,7 +99,7 @@ void			ft_bresenham2(t_mlx *mlx, t_vec4 *vec1, t_vec4 *vec2, int color)
 	}
 }
 
-static void			make_iso(t_fdf fdf)
+static void				make_iso(t_fdf fdf)
 {
 	double		scale;
 	int			k;
@@ -111,17 +111,14 @@ static void			make_iso(t_fdf fdf)
 	ft_m4trans(&m2, (WIN_X - ((fdf.width - 1) * scale)) / 2,\
 		(WIN_Y - ((fdf.height - 1) * scale)) / 2, 0);
 	ft_m4_m4(&m2, &m1);
-	ft_m4_iso(&m1);
-//	ft_printf("%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%d, %d, %d, %d\n", m2.a, m2.b, m2.c, m2.d, m2.e, m2.f, m2.g, m2.h, m2.i, m2.j, m2.k, m2.l, m2.m, m2.n, m2.o, m2.p);
 	k = -1;
 	while (++k < fdf.width * fdf.height)
 	{
-//		ft_m4_v4(&m2, fdf.vec[k]);
-		ft_m4_v4(&m1, fdf.vec[k]);
+		ft_m4_v4(&m2, fdf.vec[k]);
 	}
 }
 
-static void			do_wireframe(t_fdf fdf)
+static void				do_wireframe(t_fdf fdf)
 {
 	int		k;
 
@@ -135,7 +132,7 @@ static void			do_wireframe(t_fdf fdf)
 	}
 }
 
-int					main(int argc, const char *argv[])
+int						main(int argc, const char *argv[])
 {
 	t_fdf		fdf;
 
