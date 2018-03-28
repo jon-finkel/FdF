@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/24 20:47:36 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/28 21:45:50 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,40 +65,6 @@ static void				get_data(t_fdf *fdf, const int fd)
 	ft_varydel(&file, (t_vdtor)vdtor);
 }
 
-typedef struct		s_brz
-{
-	double			dx;
-	double			dy;
-	int				derr;
-	int8_t			sx;
-	int8_t			sy;
-}					t_brz;
-
-void			ft_bresenham2(t_mlx *mlx, t_vec4 *vec1, t_vec4 *vec2, int color)
-{
-	int			err;
-	int			x0;
-	int			y0;
-	t_brz		brz;
-
-	brz.dx = ABS(vec1->x - vec2->x);
-	brz.dy = -ABS(vec1->y - vec2->y);
-	brz.derr = brz.dx + brz.dy;
-	brz.sx = (vec1->x < vec2->x ? 1 : -1);
-	brz.sy = (vec1->y < vec2->y ? 1 : -1);
-	x0 = (int)vec1->x;
-	y0 = (int)vec1->y;
-	while (x0 != (int)vec2->x || y0 != (int)vec2->y)
-	{
-		mlx_pixel_put(mlx->mlx, mlx->win[0], x0, y0, color);
-		err = 2 * brz.derr;
-		brz.derr += (err >= brz.dy ? brz.dy : 0);
-		x0 += (err >= brz.dy ? brz.sx : 0);
-		brz.derr += (err <= brz.dx ? brz.dx : 0);
-		y0 += (err <= brz.dx ? brz.sy : 0);
-	}
-}
-
 static void				make_iso(t_fdf fdf)
 {
 	double		scale;
@@ -111,10 +77,14 @@ static void				make_iso(t_fdf fdf)
 	ft_m4trans(&m2, (WIN_X - ((fdf.width - 1) * scale)) / 2,\
 		(WIN_Y - ((fdf.height - 1) * scale)) / 2, 0);
 	ft_m4_m4(&m2, &m1);
+	ft_m4iso(&m1);
 	k = -1;
 	while (++k < fdf.width * fdf.height)
 	{
 		ft_m4_v4(&m2, fdf.vec[k]);
+		ft_putvector(fdf.vec[k]);
+		ft_m4_v4(&m1, fdf.vec[k]);
+		ft_putvector(fdf.vec[k]);
 	}
 }
 
@@ -126,9 +96,9 @@ static void				do_wireframe(t_fdf fdf)
 	while (++k < fdf.width * fdf.height)
 	{
 		if (k % fdf.width)
-			ft_bresenham2(&_MLX, fdf.vec[k - 1], fdf.vec[k], 0xffffff);
+			ft_drawline(&_MLX, fdf.vec[k - 1], fdf.vec[k], 0xffffff);
 		if (k - fdf.width >= 0)
-			ft_bresenham2(&_MLX, fdf.vec[k - fdf.width], fdf.vec[k], 0xffffff);
+			ft_drawline(&_MLX, fdf.vec[k - fdf.width], fdf.vec[k], 0xffffff);
 	}
 }
 
