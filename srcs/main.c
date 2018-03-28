@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/28 21:45:50 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/29 00:41:43 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,29 @@ static void				make_iso(t_fdf fdf)
 		ft_putvector(fdf.vec[k]);
 		ft_m4_v4(&m1, fdf.vec[k]);
 		ft_putvector(fdf.vec[k]);
+	}
+}
+
+t_mlx_img			*ft_ppxtoimg(t_mlx *mlx, double x, double y, int color)
+{
+	t_mlx_img		*img;
+
+	img = mlx->img[mlx->cur_win];
+	if (x < 0 || x > img->width || y < 0 || y > img->height)
+		GIMME(img);
+	if (!img->endian)
+		img->addr[y * img->width + x] = ft_bswap(color);
+	else
+		img->addr[y * img->width + x] = color;
+	GIMME(img);
+}
+
+t_mlx_img			*ft_drawline(t_mlx *mlx, t_vec4 *v1, t_vec4 *v2, int color)
+{
+	if (v1->x == v2->x || v1->y == v2->x)
+	{
+		if (v1->x == v2->x && v1->y == v2->y)
+			GIMME(ft_ppxtoimg(mlx, v1->x, v1->y, color));
 	}
 }
 

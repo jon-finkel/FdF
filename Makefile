@@ -6,7 +6,7 @@
 #    By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/06 20:54:44 by nfinkel           #+#    #+#              #
-#    Updated: 2018/03/19 16:03:50 by nfinkel          ###   ########.fr        #
+#    Updated: 2018/03/28 22:39:15 by nfinkel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,7 +86,7 @@ fclean: clean
 	@printf  "\033[1:32mCleaning binary -------> \033[91m$(NAME)\033[0m\033[1:32m:\033[0m%-17s\033[32m[✔]\033[0m\n"
 
 libft:
-	@$(MAKE) -C $(LIBFTDIR)
+	@$(MAKE) fast -C $(LIBFTDIR)
 
 mlx:
 	@$(MAKE) -C $(LIBMLXDIR)
