@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/29 00:41:43 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/29 14:40:10 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,12 @@ static void				make_iso(t_fdf fdf)
 	while (++k < fdf.width * fdf.height)
 	{
 		ft_m4_v4(&m2, fdf.vec[k]);
-		ft_putvector(fdf.vec[k]);
-		ft_m4_v4(&m1, fdf.vec[k]);
-		ft_putvector(fdf.vec[k]);
+//		ft_m4_v4(&m1, fdf.vec[k]);
 	}
 }
 
-t_mlx_img			*ft_ppxtoimg(t_mlx *mlx, double x, double y, int color)
+t_mlx_img			*ftx_buffppx(t_mlx_img *img, int x, int y, int color)
 {
-	t_mlx_img		*img;
-
-	img = mlx->img[mlx->cur_win];
 	if (x < 0 || x > img->width || y < 0 || y > img->height)
 		GIMME(img);
 	if (!img->endian)
@@ -102,13 +97,87 @@ t_mlx_img			*ft_ppxtoimg(t_mlx *mlx, double x, double y, int color)
 	GIMME(img);
 }
 
-t_mlx_img			*ft_drawline(t_mlx *mlx, t_vec4 *v1, t_vec4 *v2, int color)
+# define SIGN(x) ((x) < 0 ? -1 : ((x) > 0))
+
+typedef struct		s_line
 {
-	if (v1->x == v2->x || v1->y == v2->x)
+	int				dx;
+	int				dy;
+	int				sx;
+	int				sy;
+	t_mlx_img		*img;
+}					t_line;
+
+static void					init_line(const t_mlx *mlx, t_line *line,
+							const int dx, const int dy)
+{
+	line->sx = SIGN(dx);
+	line->sy = SIGN(dy);
+	line->dx = ABS(dx) << 1;
+	line->dy = ABS(dy) << 1;
+	line->img = mlx->img[mlx->cur_img];
+}
+
+static t_mlx_img			*line_pos(t_line line, t_vec4 v1, t_vec4 v2,
+							const int color)
+{
+	int		err;
+
+	err = line.dy - (line.dx >> 1);
+	while (v1.x != v2.x)
 	{
-		if (v1->x == v2->x && v1->y == v2->y)
-			GIMME(ft_ppxtoimg(mlx, v1->x, v1->y, color));
+		if (err >= 0)
+		{
+			v1.y += line.sy;
+			err -= line.dx;
+		}
+		v1.x += line.sx;
+		err += line.dy;
+		ftx_buffppx(line.img, v1.x, v1.y, color);
 	}
+	GIMME(line.img);
+}
+
+static t_mlx_img			*line_neg(t_line line, t_vec4 v1, t_vec4 v2,
+							const int color)
+{
+	int		err;
+
+	err = line.dy - (line.dx >> 1);
+	while (v1.y != v2.y)
+	{
+		if (err >= 0)
+		{
+			v1.x += line.sx;
+			err -= line.dy;
+		}
+		v1.y += line.sy;
+		err += line.dx;
+		ftx_buffppx(line.img, v1.x, v1.y, color);
+	}
+	GIMME(line.img);
+}
+
+t_mlx_img					*ftx_drawline(t_mlx *mlx, const t_vec4 *restrict v1,
+							const t_vec4 *restrict v2, const int color)
+{
+	t_line		l;
+
+	if (v1->x == v2->x || v1->y == v2->y)
+	{
+	//	if (v1->x == v2->x && v1->y == v2->y)
+			GIMME(ftx_buffppx(mlx->img[mlx->cur_img], (int)v1->x, (int)v1->y,\
+				color));
+/*		else if (v1->x == v2->x)
+			GIMME(ftx_vline;
+		else
+			GIMME(ftx_hline);*/
+	}
+	init_line(mlx, &l, (int)v2->x - (int)v1->x, (int)v2->y - (int)v1->y);
+	if (l.dx > l.dy)
+		GIMME(line_pos(l, *v1, *v2, color));
+	else
+		GIMME(line_neg(l, *v1, *v2, color));
 }
 
 static void				do_wireframe(t_fdf fdf)
@@ -119,10 +188,11 @@ static void				do_wireframe(t_fdf fdf)
 	while (++k < fdf.width * fdf.height)
 	{
 		if (k % fdf.width)
-			ft_drawline(&_MLX, fdf.vec[k - 1], fdf.vec[k], 0xffffff);
+			ftx_drawline(&_MLX, fdf.vec[k - 1], fdf.vec[k], 0xffffff);
 		if (k - fdf.width >= 0)
-			ft_drawline(&_MLX, fdf.vec[k - fdf.width], fdf.vec[k], 0xffffff);
+			ftx_drawline(&_MLX, fdf.vec[k - fdf.width], fdf.vec[k], 0xffffff);
 	}
+	mlx_put_image_to_window(_MLX.mlx, _MLX.win[0], _MLX.img[0], 0, 0);
 }
 
 int						main(int argc, const char *argv[])
@@ -133,8 +203,9 @@ int						main(int argc, const char *argv[])
 		KTHXBYE;
 	ft_memset(&fdf, '\0', sizeof(t_fdf));
 	get_data(&fdf, open(argv[1], O_RDONLY));
-	ft_mlxinit(&_MLX);
-	ft_mlxaddwin(&_MLX, WIN_X, WIN_Y, WIN_TITLE);
+	ftx_init(&_MLX);
+	ftx_addwin(&_MLX, WIN_X, WIN_Y, WIN_TITLE);
+	ftx_addimg(&_MLX, WIN_X, WIN_Y);
 	make_iso(fdf);
 	do_wireframe(fdf);
 	mlx_loop(_MLX.mlx);
