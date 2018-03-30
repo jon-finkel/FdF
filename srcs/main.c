@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/29 14:40:10 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/30 12:36:23 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #define WIN_Y 600
 #define WIN_TITLE "FdF - A wireframe renderer, by Jon Finkel"
 
-static void				parse(t_fdf *fdf, t_vary *vary, char **file)
+static void						parse(t_fdf *fdf, t_vary *vary, char **file)
 {
 	char		*s;
 	int			k;
@@ -44,7 +44,7 @@ static void				parse(t_fdf *fdf, t_vary *vary, char **file)
 	fdf->vec = vary->buff;
 }
 
-static void				get_data(t_fdf *fdf, const int fd)
+static void						get_data(t_fdf *fdf, const int fd)
 {
 	char		*line;
 	t_vary		file_null;
@@ -65,122 +65,49 @@ static void				get_data(t_fdf *fdf, const int fd)
 	ft_varydel(&file, (t_vdtor)vdtor);
 }
 
-static void				make_iso(t_fdf fdf)
+static void						make_iso(t_fdf fdf, double scale)
 {
-	double		scale;
 	int			k;
-	t_m4		m1;
-	t_m4		m2;
+	t_m4		mx;
+	t_m4		mz;
+	t_m4		ms;
+	t_m4		mt;
+	t_m4		matrix;
 
-	scale = WIN_Y / MAX(fdf.width, fdf.height);
-	ft_m4scale(&m1, scale, scale, scale);
-	ft_m4trans(&m2, (WIN_X - ((fdf.width - 1) * scale)) / 2,\
+	ms = ft_m4scale(scale, scale, scale);
+	mt = ft_m4trans((WIN_X - ((fdf.width - 1) * scale)) / 2,\
 		(WIN_Y - ((fdf.height - 1) * scale)) / 2, 0);
-	ft_m4_m4(&m2, &m1);
-	ft_m4iso(&m1);
+	mx = ft_m4rotx(M_PI / 4);
+	mz = ft_m4rotz(M_PI / 4);
+	matrix = ft_m4_m4(mx, mz);
 	k = -1;
 	while (++k < fdf.width * fdf.height)
 	{
-		ft_m4_v4(&m2, fdf.vec[k]);
-//		ft_m4_v4(&m1, fdf.vec[k]);
+//		ft_v4_m4(fdf.vec[k], matrix);
+		ft_v4_m4(fdf.vec[k], mz);
+		ft_v4_m4(fdf.vec[k], mx);
+		ft_v4_m4(fdf.vec[k], ms);
+		ft_v4_m4(fdf.vec[k], mt);
 	}
 }
 
-t_mlx_img			*ftx_buffppx(t_mlx_img *img, int x, int y, int color)
+void			ftx_drawline(t_mlx *mlx, const t_vec4 v1, const t_vec4 v2,
+				int color)
 {
-	if (x < 0 || x > img->width || y < 0 || y > img->height)
-		GIMME(img);
-	if (!img->endian)
-		img->addr[y * img->width + x] = ft_bswap(color);
-	else
-		img->addr[y * img->width + x] = color;
-	GIMME(img);
+	int			k;
+	double		x;
+	double		y;
+
+	if ((k = MAX(fabs(v1.x - v2.x), fabs(v1.y - v2.y) + 1)) == 1)
+		BYEZ;
+	x = (v2.x - v1.x) / k;
+	y = (v2.y - v1.y) / k;
+	while (k--)
+		mlx_pixel_put(mlx->mlx, mlx->win[0], (v1.x + x * k), (v1.y + y * k),
+			color);
 }
 
-# define SIGN(x) ((x) < 0 ? -1 : ((x) > 0))
-
-typedef struct		s_line
-{
-	int				dx;
-	int				dy;
-	int				sx;
-	int				sy;
-	t_mlx_img		*img;
-}					t_line;
-
-static void					init_line(const t_mlx *mlx, t_line *line,
-							const int dx, const int dy)
-{
-	line->sx = SIGN(dx);
-	line->sy = SIGN(dy);
-	line->dx = ABS(dx) << 1;
-	line->dy = ABS(dy) << 1;
-	line->img = mlx->img[mlx->cur_img];
-}
-
-static t_mlx_img			*line_pos(t_line line, t_vec4 v1, t_vec4 v2,
-							const int color)
-{
-	int		err;
-
-	err = line.dy - (line.dx >> 1);
-	while (v1.x != v2.x)
-	{
-		if (err >= 0)
-		{
-			v1.y += line.sy;
-			err -= line.dx;
-		}
-		v1.x += line.sx;
-		err += line.dy;
-		ftx_buffppx(line.img, v1.x, v1.y, color);
-	}
-	GIMME(line.img);
-}
-
-static t_mlx_img			*line_neg(t_line line, t_vec4 v1, t_vec4 v2,
-							const int color)
-{
-	int		err;
-
-	err = line.dy - (line.dx >> 1);
-	while (v1.y != v2.y)
-	{
-		if (err >= 0)
-		{
-			v1.x += line.sx;
-			err -= line.dy;
-		}
-		v1.y += line.sy;
-		err += line.dx;
-		ftx_buffppx(line.img, v1.x, v1.y, color);
-	}
-	GIMME(line.img);
-}
-
-t_mlx_img					*ftx_drawline(t_mlx *mlx, const t_vec4 *restrict v1,
-							const t_vec4 *restrict v2, const int color)
-{
-	t_line		l;
-
-	if (v1->x == v2->x || v1->y == v2->y)
-	{
-	//	if (v1->x == v2->x && v1->y == v2->y)
-			GIMME(ftx_buffppx(mlx->img[mlx->cur_img], (int)v1->x, (int)v1->y,\
-				color));
-/*		else if (v1->x == v2->x)
-			GIMME(ftx_vline;
-		else
-			GIMME(ftx_hline);*/
-	}
-	init_line(mlx, &l, (int)v2->x - (int)v1->x, (int)v2->y - (int)v1->y);
-	if (l.dx > l.dy)
-		GIMME(line_pos(l, *v1, *v2, color));
-	else
-		GIMME(line_neg(l, *v1, *v2, color));
-}
-
-static void				do_wireframe(t_fdf fdf)
+static void						do_wireframe(t_fdf fdf)
 {
 	int		k;
 
@@ -188,14 +115,14 @@ static void				do_wireframe(t_fdf fdf)
 	while (++k < fdf.width * fdf.height)
 	{
 		if (k % fdf.width)
-			ftx_drawline(&_MLX, fdf.vec[k - 1], fdf.vec[k], 0xffffff);
+			ftx_drawline(&_MLX, *fdf.vec[k - 1], *fdf.vec[k], 0xffffff);
 		if (k - fdf.width >= 0)
-			ftx_drawline(&_MLX, fdf.vec[k - fdf.width], fdf.vec[k], 0xffffff);
+			ftx_drawline(&_MLX, *fdf.vec[k - fdf.width], *fdf.vec[k], 0xffffff);
 	}
 	mlx_put_image_to_window(_MLX.mlx, _MLX.win[0], _MLX.img[0], 0, 0);
 }
 
-int						main(int argc, const char *argv[])
+int								main(int argc, const char *argv[])
 {
 	t_fdf		fdf;
 
@@ -206,7 +133,7 @@ int						main(int argc, const char *argv[])
 	ftx_init(&_MLX);
 	ftx_addwin(&_MLX, WIN_X, WIN_Y, WIN_TITLE);
 	ftx_addimg(&_MLX, WIN_X, WIN_Y);
-	make_iso(fdf);
+	make_iso(fdf, WIN_Y / MAX(fdf.width, fdf.height));
 	do_wireframe(fdf);
 	mlx_loop(_MLX.mlx);
 	KTHXBYE;
