@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/30 12:36:23 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/03/30 12:58:41 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,28 +67,19 @@ static void						get_data(t_fdf *fdf, const int fd)
 
 static void						make_iso(t_fdf fdf, double scale)
 {
-	int			k;
 	t_m4		mx;
 	t_m4		mz;
 	t_m4		ms;
 	t_m4		mt;
-	t_m4		matrix;
 
 	ms = ft_m4scale(scale, scale, scale);
-	mt = ft_m4trans((WIN_X - ((fdf.width - 1) * scale)) / 2,\
-		(WIN_Y - ((fdf.height - 1) * scale)) / 2, 0);
+	mt = ft_m4trans(WIN_X / 4, WIN_Y / 4, 0);
 	mx = ft_m4rotx(M_PI / 4);
 	mz = ft_m4rotz(M_PI / 4);
-	matrix = ft_m4_m4(mx, mz);
-	k = -1;
-	while (++k < fdf.width * fdf.height)
-	{
-//		ft_v4_m4(fdf.vec[k], matrix);
-		ft_v4_m4(fdf.vec[k], mz);
-		ft_v4_m4(fdf.vec[k], mx);
-		ft_v4_m4(fdf.vec[k], ms);
-		ft_v4_m4(fdf.vec[k], mt);
-	}
+	ft_veciter(fdf.vec, mz, fdf.width * fdf.height);
+	ft_veciter(fdf.vec, mx, fdf.width * fdf.height);
+	ft_veciter(fdf.vec, ms, fdf.width * fdf.height);
+	ft_veciter(fdf.vec, mt, fdf.width * fdf.height);
 }
 
 void			ftx_drawline(t_mlx *mlx, const t_vec4 v1, const t_vec4 v2,
