@@ -6,7 +6,7 @@
 #    By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/06 20:54:44 by nfinkel           #+#    #+#              #
-#    Updated: 2018/03/28 22:39:15 by nfinkel          ###   ########.fr        #
+#    Updated: 2018/03/30 14:47:11 by nfinkel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,7 +96,7 @@ noflags: re
 
 purge: fclean
 	@$(MAKE) fclean -C $(LIBFTDIR)
-	@$(MAKE) clean -C $(LIBMLXDIR)
+	@$(MAKE) fclean -C $(LIBMLXDIR)
 
 re: fclean all
 
