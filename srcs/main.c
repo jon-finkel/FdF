@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/30 12:58:41 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/01 14:31:48 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ static void						make_iso(t_fdf fdf, double scale)
 	mt = ft_m4trans(WIN_X / 4, WIN_Y / 4, 0);
 	mx = ft_m4rotx(M_PI / 4);
 	mz = ft_m4rotz(M_PI / 4);
-	ft_veciter(fdf.vec, mz, fdf.width * fdf.height);
-	ft_veciter(fdf.vec, mx, fdf.width * fdf.height);
+//	ft_veciter(fdf.vec, mz, fdf.width * fdf.height);
+//	ft_veciter(fdf.vec, mx, fdf.width * fdf.height);
 	ft_veciter(fdf.vec, ms, fdf.width * fdf.height);
 	ft_veciter(fdf.vec, mt, fdf.width * fdf.height);
 }
 
-void			ftx_drawline(t_mlx *mlx, const t_vec4 v1, const t_vec4 v2,
+/*void			ftx_drawline(t_mlx *mlx, const t_vec4 v1, const t_vec4 v2,
 				int color)
 {
 	int			k;
@@ -96,21 +96,43 @@ void			ftx_drawline(t_mlx *mlx, const t_vec4 v1, const t_vec4 v2,
 	while (k--)
 		mlx_pixel_put(mlx->mlx, mlx->win[0], (v1.x + x * k), (v1.y + y * k),
 			color);
+}*/
+
+t_mlx_img			*ftx_drawline(t_mlx *mlx, t_mlx_img *img, const t_vec4 v1,
+					const t_vec4 v2, int color)
+{
+	if (v1.x == v2.x || v1.y == v2.y)
+	{
+		if (v1.x == v2.x && v1.y == v2.y)
+			ftx_buffpixel(mlx, img, (int)v1.x, (int)v1.y, color);
+		else if (v1.x == v2.x)
+			ftx_vline(mlx, img, v1, v2, color);
+		else
+			ftx_hline(mlx, img, v1, v2, color);
+	}
+	ZOMG;
 }
 
-static void						do_wireframe(t_fdf fdf)
+static void						do_wireframe(t_mlx *mlx, const t_fdf fdf)
 {
-	int		k;
+	int			k;
+	t_vec4		v;
 
 	k = 0;
 	while (++k < fdf.width * fdf.height)
 	{
 		if (k % fdf.width)
-			ftx_drawline(&_MLX, *fdf.vec[k - 1], *fdf.vec[k], 0xffffff);
+		{
+			v = *fdf.vec[k - 1];
+			ftx_drawline(mlx, _MLX_IMG, v, *fdf.vec[k], 0xffffff);
+		}
 		if (k - fdf.width >= 0)
-			ftx_drawline(&_MLX, *fdf.vec[k - fdf.width], *fdf.vec[k], 0xffffff);
+		{
+			v = *fdf.vec[k - fdf.width];
+			ftx_drawline(mlx, _MLX_IMG, v, *fdf.vec[k], 0xffffff);
+		}
 	}
-	mlx_put_image_to_window(_MLX.mlx, _MLX.win[0], _MLX.img[0], 0, 0);
+	mlx_put_image_to_window(_MLX_ID, _MLX_WIN, _MLX_IMG->img, 0, 0);
 }
 
 int								main(int argc, const char *argv[])
@@ -125,7 +147,7 @@ int								main(int argc, const char *argv[])
 	ftx_addwin(&_MLX, WIN_X, WIN_Y, WIN_TITLE);
 	ftx_addimg(&_MLX, WIN_X, WIN_Y);
 	make_iso(fdf, WIN_Y / MAX(fdf.width, fdf.height));
-	do_wireframe(fdf);
+	do_wireframe(&fdf.mlx, fdf);
 	mlx_loop(_MLX.mlx);
 	KTHXBYE;
 }
