@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/01 14:31:48 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/01 17:44:48 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,19 +98,48 @@ static void						make_iso(t_fdf fdf, double scale)
 			color);
 }*/
 
-t_mlx_img			*ftx_drawline(t_mlx *mlx, t_mlx_img *img, const t_vec4 v1,
+typedef struct		s_line
+{
+	int				dx;
+	int				dy;
+	int				sx;
+	int				sy;
+}					t_line;
+
+static void			pos_line(t_mlx_img *img, const t_line line, const int color)
+{
+
+}
+
+static void			init_line(t_line *line, const int dx, const int dy)
+{
+	line->sx = SIGN(dx);
+	line->sy = SIGN(dy);
+	line->dx = fabs(dx) << 1;
+	line->dy = fabs(dy) << 1;
+}
+
+t_mlx_img			*ftx_drawline(t_mlx_img *img, const t_vec4 v1,
 					const t_vec4 v2, int color)
 {
+	t_line		line;
+
 	if (v1.x == v2.x || v1.y == v2.y)
 	{
 		if (v1.x == v2.x && v1.y == v2.y)
-			ftx_buffpixel(mlx, img, (int)v1.x, (int)v1.y, color);
+			GIMME(ftx_buffpixel(img, (int)v1.x, (int)v1.y, color));
 		else if (v1.x == v2.x)
-			ftx_vline(mlx, img, v1, v2, color);
+			GIMME(ftx_vline(img, v1, v2, color));
 		else
-			ftx_hline(mlx, img, v1, v2, color);
+			GIMME(ftx_hline(img, v1, v2, color));
 	}
-	ZOMG;
+	init_line(&line, (int)(v2.x - v1.x), (int)(v2.y - v1.y));
+	ftx_buffpixel(img, (int)v1.x, (int)v1.y, color);
+	if (line.dx > line.dy)
+		pos_line(img, line, color);
+	else
+		neg_line(img, line, color);
+	GIMME(img);
 }
 
 static void						do_wireframe(t_mlx *mlx, const t_fdf fdf)
@@ -124,15 +153,15 @@ static void						do_wireframe(t_mlx *mlx, const t_fdf fdf)
 		if (k % fdf.width)
 		{
 			v = *fdf.vec[k - 1];
-			ftx_drawline(mlx, _MLX_IMG, v, *fdf.vec[k], 0xffffff);
+			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], 0xffffff);
 		}
 		if (k - fdf.width >= 0)
 		{
 			v = *fdf.vec[k - fdf.width];
-			ftx_drawline(mlx, _MLX_IMG, v, *fdf.vec[k], 0xffffff);
+			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], 0xffffff);
 		}
 	}
-	mlx_put_image_to_window(_MLX_ID, _MLX_WIN, _MLX_IMG->img, 0, 0);
+	mlx_put_image_to_window(_MLX_ID, _MLX_WIN_ID, _MLX_IMG_ID, 0, 0);
 }
 
 int								main(int argc, const char *argv[])
