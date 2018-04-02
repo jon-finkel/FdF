@@ -6,15 +6,11 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/02 01:21:05 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/02 12:52:47 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-#define WIN_X 1200
-#define WIN_Y 600
-#define WIN_TITLE "FdF - A wireframe renderer, by Jon Finkel"
 
 static void			parse(t_fdf *fdf, t_vary *vary, char **file)
 {
@@ -82,7 +78,7 @@ static void			make_iso(t_fdf fdf, double scale)
 	ft_veciter(fdf.vec, mt, fdf.width * fdf.height);
 }
 
-static void			do_wireframe(t_mlx *mlx, const t_fdf fdf)
+static void			output(t_mlx *mlx, const t_fdf fdf)
 {
 	int			k;
 	t_vec4		v;
@@ -104,6 +100,11 @@ static void			do_wireframe(t_mlx *mlx, const t_fdf fdf)
 	mlx_put_image_to_window(_MLX_ID, _MLX_WIN_ID, _MLX_IMG_ID, 0, 0);
 }
 
+static void			key_hook(t_fdf *fdf)
+{
+	(void)fdf;
+}
+
 int					main(int argc, const char *argv[])
 {
 	t_fdf		fdf;
@@ -112,11 +113,12 @@ int					main(int argc, const char *argv[])
 		KTHXBYE;
 	ft_memset(&fdf, '\0', sizeof(t_fdf));
 	get_data(&fdf, open(argv[1], O_RDONLY));
-	ftx_init(&_MLX);
-	ftx_addwin(&_MLX, WIN_X, WIN_Y, WIN_TITLE);
-	ftx_addimg(&_MLX, WIN_X, WIN_Y);
+	ftx_init(&fdf.mlx);
+	ftx_addwin(&fdf.mlx, WIN_X, WIN_Y, WIN_TITLE);
+	ftx_addimg(&fdf.mlx, WIN_X, WIN_Y);
 	make_iso(fdf, WIN_Y / MAX(fdf.width, fdf.height));
-	do_wireframe(&fdf.mlx, fdf);
-	mlx_loop(_MLX.mlx);
+	output(&fdf.mlx, fdf);
+//	mlx_hook(&fdf.mlx.win[0], X_KEYPRESS, X_KEYPRESSMASK, ((int *)())key_hook, &fdf);
+	mlx_loop(fdf.mlx.mlx);
 	KTHXBYE;
 }

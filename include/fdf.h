@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/23 18:41:55 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/02 12:52:11 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 # include "libft.h"
 # include "mlx.h"
 
-# define _MLX fdf.mlx
+# define WIN_X 1200
+# define WIN_Y 600
+# define WIN_TITLE "FdF - A wireframe renderer, by Jon Finkel"
 
 typedef struct		s_fdf
 {
