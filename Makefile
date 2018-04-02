@@ -6,7 +6,7 @@
 #    By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/02/06 20:54:44 by nfinkel           #+#    #+#              #
-#    Updated: 2018/03/30 14:47:11 by nfinkel          ###   ########.fr        #
+#    Updated: 2018/04/02 12:30:33 by nfinkel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ ifneq ($(OS), Linux)
 	FLAGS +=				-Wall -Wextra -Werror 
 endif
 
-HEADERS +=					-I ./includes/
+HEADERS +=					-I ./include/
 HEADERS +=					-I $(LIBFTH)
 HEADERS +=					-I $(LIBMLXH)
 O_FLAG :=					-O2
@@ -37,8 +37,8 @@ O_FLAG :=					-O2
 #	Directories
 LIBFTDIR :=					./libft/
 LIBMLXDIR :=				./mlx/
-LIBFTH :=					$(LIBFTDIR)includes/
-LIBMLXH :=					$(LIBMLXDIR)
+LIBFTH :=					$(LIBFTDIR)include/
+LIBMLXH :=					$(LIBMLXDIR)include/
 OBJDIR :=					./build/
 
 SRC_DIR :=					./srcs/
@@ -89,7 +89,7 @@ libft:
 	@$(MAKE) fast -C $(LIBFTDIR)
 
 mlx:
-	@$(MAKE) -C $(LIBMLXDIR)
+	@$(MAKE) fast -C $(LIBMLXDIR)
 
 noflags: FLAGS :=
 noflags: re
