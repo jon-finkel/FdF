@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 12:50:38 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/03 12:53:41 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/03 20:48:37 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static t_vary		*g_vary = &g_vary_null;
 
 void				terminate(t_fdf *fdf)
 {
-(void)fdf;
+	ft_memdel((void **)&fdf->origin);
+	ft_memdel((void **)&fdf->pos);
 	ft_varydel(&g_vary, vdtor, E_VARY);
 	exit(EXIT_SUCCESS);
 }
@@ -30,9 +31,8 @@ static void			parse(t_fdf *fdf, char **file)
 	int			z;
 
 	k = -1;
-	while (file[++k])
+	while (file[++k] && (s = file[k]))
 	{
-		s = file[k];
 		p = -1;
 		while (*s)
 		{
@@ -44,7 +44,8 @@ static void			parse(t_fdf *fdf, char **file)
 			while (IS_WHITESPACE(*s))
 				++s;
 		}
-		fdf->width = MAX(fdf->width, p + 1);
+		fdf->size += ++p;
+		fdf->width = MAX(fdf->width, p);
 	}
 	fdf->height = k;
 	fdf->vec = g_vary->buff;
