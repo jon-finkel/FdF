@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 12:50:38 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/03 22:26:05 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/04 00:50:35 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ void				terminate(t_fdf *fdf)
 	exit(EXIT_SUCCESS);
 }
 
+static char			*skip(char *s)
+{
+	while (IS_WHITESPACE(*s))
+		++s;
+	GIMME(s);
+}
+
 static void			parse(t_fdf *fdf, char **file)
 {
 	char		*s;
@@ -39,13 +46,13 @@ static void			parse(t_fdf *fdf, char **file)
 		p = -1;
 		while (*s)
 		{
-			while (IS_WHITESPACE(*s))
-				++s;
+			s = skip(s);
 			z = ft_atoi(s);
 			*(t_vec4 **)ft_varypush(g_vary) = ft_vecnew(++p, k, z, true);
 			s += ft_intlen(z);
 			if (*s && !IS_WHITESPACE(*s))
 				fdf_errhdl(file[k], k);
+			s = skip(s);
 		}
 		fdf->size += ++p;
 		fdf->width = MAX(fdf->width, p);
