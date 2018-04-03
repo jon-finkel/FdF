@@ -6,60 +6,11 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/02 12:52:47 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/03 12:52:04 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-static void			parse(t_fdf *fdf, t_vary *vary, char **file)
-{
-	char		*s;
-	int			k;
-	int			p;
-	int			z;
-
-	k = -1;
-	while (file[++k])
-	{
-		s = file[k];
-		p = -1;
-		while (*s)
-		{
-			z = ft_atoi(s);
-			*(t_vec4 **)ft_varypush(vary) = ft_vecnew(++p, k, z, true);
-			s += ft_intlen(z);
-			if (*s && !IS_WHITESPACE(*s))
-				fdf_errhdl(file[k], k);
-			while (IS_WHITESPACE(*s))
-				++s;
-		}
-		fdf->width = MAX(fdf->width, p + 1);
-	}
-	fdf->height = k;
-	fdf->vec = vary->buff;
-}
-
-static void			get_data(t_fdf *fdf, const int fd)
-{
-	char		*line;
-	t_vary		file_null;
-	t_vary		*file;
-	t_vary		vary_null;
-
-	if (fd < 0)
-		ft_errhdl(NULL, 0, (int)ERR_FD);
-	file = &file_null;
-	ft_memset(file, '\0', sizeof(t_vary));
-	file->data_size = sizeof(char *);
-	while (get_next_line(fd, &line))
-		*(char **)ft_varypush(file) = line;
-	close(fd);
-	ft_memset(&vary_null, '\0', sizeof(t_vary));
-	vary_null.data_size = sizeof(t_vec4 *);
-	parse(fdf, &vary_null, file->buff);
-	ft_varydel(&file, (t_vdtor)vdtor);
-}
 
 static void			make_iso(t_fdf fdf, double scale)
 {
@@ -100,9 +51,35 @@ static void			output(t_mlx *mlx, const t_fdf fdf)
 	mlx_put_image_to_window(_MLX_ID, _MLX_WIN_ID, _MLX_IMG_ID, 0, 0);
 }
 
-static void			key_hook(t_fdf *fdf)
+static void			move(t_vec4 **avec, const t_fdf fdf, const int key,
+					const int value)
 {
-	(void)fdf;
+	if (key == X_KEY_A)
+		ft_veciter(avec, ft_m4trans(-value, 0, 0), fdf.width * fdf.height);
+	else if (key == X_KEY_D)
+		ft_veciter(avec, ft_m4trans(value, 0, 0), fdf.width * fdf.height);
+	else if (key == X_KEY_W)
+		ft_veciter(avec, ft_m4trans(0, -value, 0), fdf.width * fdf.height);
+	else if (key == X_KEY_S)
+		ft_veciter(avec, ft_m4trans(0, value, 0), fdf.width * fdf.height);
+}
+
+static void			key_hook(int key, t_fdf *fdf)
+{
+	static uint8_t		value = 5;
+	t_mlx				*mlx;
+
+	mlx = &fdf->mlx;
+	if (key == X_KEY_ESCAPE)
+		terminate(fdf);
+	else if (key == X_KEY_Q && value)
+		value -= 5;
+	else if (key == X_KEY_E && value < UCHAR_MAX)
+		value += 5;
+	else if ((key >= X_KEY_A && key <= X_KEY_D) || key == X_KEY_W)
+		move(fdf->vec, *fdf, key, value);
+	ftx_clearimg(_MLX_IMG);
+	output(mlx, *fdf);
 }
 
 int					main(int argc, const char *argv[])
@@ -118,7 +95,7 @@ int					main(int argc, const char *argv[])
 	ftx_addimg(&fdf.mlx, WIN_X, WIN_Y);
 	make_iso(fdf, WIN_Y / MAX(fdf.width, fdf.height));
 	output(&fdf.mlx, fdf);
-//	mlx_hook(&fdf.mlx.win[0], X_KEYPRESS, X_KEYPRESSMASK, ((int *)())key_hook, &fdf);
+	mlx_hook(fdf.mlx.win[0], 2, X_KEYPRESS_MASK, (int(*)())key_hook, &fdf);
 	mlx_loop(fdf.mlx.mlx);
 	KTHXBYE;
 }

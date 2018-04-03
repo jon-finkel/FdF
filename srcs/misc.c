@@ -6,19 +6,25 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 10:57:20 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/03/19 14:44:58 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/03 12:51:41 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void					vdtor(void *data)
-{
-	ft_strdel((char **)data);
-}
-
 _Noreturn void			fdf_errhdl(const char *line, int y)
 {
 	ft_dprintf(STDERR_FILENO, "fdf: parsing error, line[%d]: %s\n", y, line);
 	exit(EXIT_FAILURE);
+}
+
+void					vdtor(void *data, va_list ap)
+{
+	t_flag		flag;
+
+	flag = va_arg(ap, t_flag);
+	if (flag == E_FILE)
+		ft_strdel((char **)data);
+	else if (flag == E_VARY)
+		ft_memdel((void **)&*(t_vec4 **)data);
 }

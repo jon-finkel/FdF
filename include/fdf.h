@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/02 12:52:11 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/03 12:53:52 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
 # define WIN_Y 600
 # define WIN_TITLE "FdF - A wireframe renderer, by Jon Finkel"
 
+typedef enum		e_flag
+{
+	E_FILE,
+	E_VARY
+}					t_flag;
+
 typedef struct		s_fdf
 {
 	short			height;
@@ -30,6 +36,8 @@ typedef struct		s_fdf
 }					t_fdf;
 
 _Noreturn void		fdf_errhdl(const char *line, int y);
-void				vdtor(void *data);
+void				get_data(t_fdf *fdf, const int fd);
+void				terminate(t_fdf *fdf);
+void				vdtor(void *data, va_list ap);
 
 #endif
