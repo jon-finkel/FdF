@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/03 20:48:09 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/03 23:36:56 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,17 @@
 typedef enum		e_flag
 {
 	E_FILE,
+	E_IMG,
+	E_WIN,
 	E_VARY
 }					t_flag;
 
 typedef struct		s_fdf
 {
+	bool			cinema;
+	short			c_x;
+	short			c_y;
+	short			c_z;
 	short			height;
 	short			width;
 	size_t			size;
@@ -41,6 +47,7 @@ typedef struct		s_fdf
 _Noreturn void		fdf_errhdl(const char *line, int y);
 void				get_data(t_fdf *fdf, const int fd);
 void				key_hook(int key, t_fdf *fdf);
+void				output(t_mlx *mlx, const t_fdf fdf);
 void				terminate(t_fdf *fdf);
 void				vdtor(void *data, va_list ap);
 

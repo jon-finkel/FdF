@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 12:50:38 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/03 20:48:37 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/03 22:26:05 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void				terminate(t_fdf *fdf)
 	ft_memdel((void **)&fdf->origin);
 	ft_memdel((void **)&fdf->pos);
 	ft_varydel(&g_vary, vdtor, E_VARY);
+	ft_varydel(&g_mlx_img_vary, vdtor, E_IMG);
+	ft_varydel(&g_mlx_win_vary, vdtor, E_WIN);
 	exit(EXIT_SUCCESS);
 }
 
@@ -31,18 +33,19 @@ static void			parse(t_fdf *fdf, char **file)
 	int			z;
 
 	k = -1;
-	while (file[++k] && (s = file[k]))
+	while (file[++k])
 	{
+		s = file[k];
 		p = -1;
 		while (*s)
 		{
+			while (IS_WHITESPACE(*s))
+				++s;
 			z = ft_atoi(s);
 			*(t_vec4 **)ft_varypush(g_vary) = ft_vecnew(++p, k, z, true);
 			s += ft_intlen(z);
 			if (*s && !IS_WHITESPACE(*s))
 				fdf_errhdl(file[k], k);
-			while (IS_WHITESPACE(*s))
-				++s;
 		}
 		fdf->size += ++p;
 		fdf->width = MAX(fdf->width, p);
