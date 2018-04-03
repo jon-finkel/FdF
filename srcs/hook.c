@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 13:17:30 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/04 00:27:44 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/04 00:35:49 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void				output(t_mlx *mlx, const t_fdf fdf)
 	int			k;
 	t_vec4		v;
 
+	ftx_clearimg(mlx->img[mlx->cur_img]);
 	k = 0;
 	while ((size_t)++k < fdf.size)
 	{
@@ -116,6 +117,5 @@ void				key_hook(int key, t_fdf *fdf)
 	else
 		spin(fdf->vec, *fdf, key);
 	ftx_veccenter(fdf->vec, fdf->size, *fdf->pos);
-	ftx_clearimg(fdf->mlx.img[0]);
 	output(&fdf->mlx, *fdf);
 }
