@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 01:04:00 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 01:43:23 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void				output(t_mlx *mlx, const t_fdf fdf)
 	int			k;
 	t_vec4		v;
 
-	ftx_blurrimg(_MLX_IMG);
+	ftx_blurimg(_MLX_IMG);
 	k = 0;
 	while ((size_t)++k < fdf.size)
 	{
@@ -67,8 +67,9 @@ static void			cinematic(t_fdf *fdf)
 		ft_veciter(fdf->vec, ft_m4roty(2 * M_PI / fdf->c_y), fdf->size);
 		ft_veciter(fdf->vec, ft_m4rotz(2 * M_PI / fdf->c_z), fdf->size);
 		ftx_veccenter(fdf->vec, fdf->size, *fdf->pos);
-		output(&fdf->mlx, *fdf);
 	}
+	if (fdf->cinema || fdf->psy)
+		output(&fdf->mlx, *fdf);
 }
 
 int					main(int argc, const char *argv[])
