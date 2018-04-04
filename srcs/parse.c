@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 12:50:38 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/04 00:50:35 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/04 21:19:40 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@ static t_vary		*g_vary = &g_vary_null;
 
 void				terminate(t_fdf *fdf)
 {
+	ft_varydel(&g_vary, vdtor, E_VARY);
 	ft_memdel((void **)&fdf->origin);
 	ft_memdel((void **)&fdf->pos);
-	ft_varydel(&g_vary, vdtor, E_VARY);
-	ft_varydel(&g_mlx_img_vary, vdtor, E_IMG);
-	ft_varydel(&g_mlx_win_vary, vdtor, E_WIN);
+	ftx_mlxdtor(&fdf->mlx);
 	exit(EXIT_SUCCESS);
 }
 

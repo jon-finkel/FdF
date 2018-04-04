@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 10:57:20 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/03 22:26:22 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/04 16:56:11 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@ void					vdtor(void *data, va_list ap)
 	flag = va_arg(ap, t_flag);
 	if (flag == E_FILE)
 		ft_strdel((char **)data);
-	else if (flag == E_IMG)
-		ft_memdel((void **)&*(t_mlx_img **)data);
-	else if (flag == E_WIN)
-		ft_memdel((void **)data);
 	else if (flag == E_VARY)
 		ft_memdel((void **)&*(t_vec4 **)data);
 }

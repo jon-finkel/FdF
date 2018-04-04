@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/04 00:42:12 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/04 21:18:50 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,29 @@ static void			fdf_init(t_fdf *fdf, double scale)
 	}
 }*/
 
+void				output(t_mlx *mlx, const t_fdf fdf)
+{
+	int			k;
+	t_vec4		v;
+
+	ftx_blurrimg(_MLX_IMG);
+	k = 0;
+	while ((size_t)++k < fdf.size)
+	{
+		if (k % fdf.width)
+		{
+			v = *fdf.vec[k - 1];
+			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], 0xffffff);
+		}
+		if (k - fdf.width >= 0)
+		{
+			v = *fdf.vec[k - fdf.width];
+			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], 0xffffff);
+		}
+	}
+	mlx_put_image_to_window(_MLX_ID, _MLX_WIN_ID, _MLX_IMG_ID, 0, 0);
+}
+
 static void			cinematic(t_fdf *fdf)
 {
 	if (fdf->cinema)
@@ -63,8 +86,8 @@ int					main(int argc, const char *argv[])
 //		KTHXBYE;
 	get_data(&fdf, open(argv[1], O_RDONLY));
 	ftx_init(&fdf.mlx);
-	ftx_addwin(&fdf.mlx, WIN_X, WIN_Y, WIN_TITLE);
-	ftx_addimg(&fdf.mlx, WIN_X, WIN_Y);
+	ftx_winctor(&fdf.mlx, WIN_X, WIN_Y, WIN_TITLE);
+	ftx_imgctor(&fdf.mlx, WIN_X, WIN_Y);
 	fdf_init(&fdf, WIN_Y / MAX(fdf.width, fdf.height));
 	key_hook(0, &fdf);
 	mlx_hook(fdf.mlx.win[0], 2, X_KEYPRESS_MASK, (int(*)())key_hook, &fdf);

@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/04 00:37:39 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/04 21:19:55 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 typedef enum		e_flag
 {
 	E_FILE,
-	E_IMG,
-	E_WIN,
 	E_VARY
 }					t_flag;
 
