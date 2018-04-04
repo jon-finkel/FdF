@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 00:09:39 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 01:04:00 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,6 @@ static void			fdf_init(t_fdf *fdf)
 	fdf->pos = ft_vecnew(WIN_X / 2, WIN_Y / 2, 0, 1);
 }
 
-/*static int			check_args(int argc, const char *argv[])
-{
-	if (argc > 2)
-	{
-
-	}
-}*/
-
 void				output(t_mlx *mlx, const t_fdf fdf)
 {
 	int			k;
@@ -53,12 +45,12 @@ void				output(t_mlx *mlx, const t_fdf fdf)
 		if (k % fdf.width)
 		{
 			v = *fdf.vec[k - 1];
-			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], fdf.psych ? rand() : INT_MAX);
+			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], fdf.psy ? rand() : 0xffffff);
 		}
 		if (k - fdf.width >= 0)
 		{
 			v = *fdf.vec[k - fdf.width];
-			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], fdf.psych ? rand() : INT_MAX);
+			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], fdf.psy ? rand() : 0xffffff);
 		}
 	}
 	mlx_put_image_to_window(_MLX_ID, _MLX_WIN_ID, _MLX_IMG_ID, 0, 0);
@@ -83,18 +75,20 @@ int					main(int argc, const char *argv[])
 {
 	t_fdf		fdf;
 
-	if (argc == 1)
+	if (argc != 2)
+	{
+		ft_printf("usage: ./fdf <file>\n");
 		KTHXBYE;
+	}
 	ft_memset(&fdf, '\0', sizeof(t_fdf));
-//	if (check_args(argc, argv))
-//		KTHXBYE;
 	get_data(&fdf, open(argv[1], O_RDONLY));
 	ftx_init(&fdf.mlx);
 	ftx_winctor(&fdf.mlx, WIN_X, WIN_Y, WIN_TITLE);
 	ftx_imgctor(&fdf.mlx, WIN_X, WIN_Y);
 	fdf_init(&fdf);
-	key_hook(0, &fdf);
-	mlx_hook(fdf.mlx.win[0], 2, X_KEYPRESS_MASK, (int(*)())key_hook, &fdf);
+	key_hook(X_KEY_SPACE, &fdf);
+	mlx_hook(fdf.mlx.win[0], X_KEYPRESS, X_KEYPRESS_MASK, (int (*)())key_hook,\
+		&fdf);
 	mlx_loop_hook(fdf.mlx.mlx, (int (*)())cinematic, &fdf);
 	mlx_loop(fdf.mlx.mlx);
 	KTHXBYE;

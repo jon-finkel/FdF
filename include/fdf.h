@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 00:06:51 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 00:41:28 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct		s_fdf
 {
 	bool			cinema;
 	bool			debug;
-	bool			psych;
+	bool			psy;
 	double			zoom;
 	short			c_x;
 	short			c_y;

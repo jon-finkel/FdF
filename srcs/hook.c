@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 13:17:30 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 00:08:23 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 01:03:45 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,12 @@ void				key_hook(int key, t_fdf *fdf)
 		fdf->trans_speed -= 5;
 	else if (key == X_KEY_R && fdf->trans_speed < UCHAR_MAX)
 		fdf->trans_speed += 5;
-	else if (key == X_KEY_L_ALT)
-		fdf->psych = (fdf->psych ? false : true);
 	else
 	{
 		if ((key >= X_KEY_1 && key <= X_KEY_0) || key == X_KEY_BACKTICK)
 			cinema(fdf, key);
+		else if (key == X_KEY_L_ALT)
+			fdf->psy = (fdf->psy ? false : true);
 		else
 			transfo(fdf, &fdf->mlx, key, fdf->trans_speed);
 		output(&fdf->mlx, *fdf);
