@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 12:50:38 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/04 21:19:40 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/04 22:27:16 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,34 +24,27 @@ void				terminate(t_fdf *fdf)
 	exit(EXIT_SUCCESS);
 }
 
-static char			*skip(char *s)
+static void			parse(t_fdf *fdf, char **file, char *s)
 {
-	while (IS_WHITESPACE(*s))
-		++s;
-	GIMME(s);
-}
-
-static void			parse(t_fdf *fdf, char **file)
-{
-	char		*s;
 	int			k;
 	int			p;
 	int			z;
 
 	k = -1;
-	while (file[++k])
+	while (file[++k] && (s = file[k]))
 	{
-		s = file[k];
 		p = -1;
 		while (*s)
 		{
-			s = skip(s);
+			while (IS_WHITESPACE(*s))
+				++s;
 			z = ft_atoi(s);
 			*(t_vec4 **)ft_varypush(g_vary) = ft_vecnew(++p, k, z, true);
 			s += ft_intlen(z);
 			if (*s && !IS_WHITESPACE(*s))
 				fdf_errhdl(file[k], k);
-			s = skip(s);
+			while (IS_WHITESPACE(*s))
+				++s;
 		}
 		fdf->size += ++p;
 		fdf->width = MAX(fdf->width, p);
@@ -74,6 +67,6 @@ void				get_data(t_fdf *fdf, const int fd)
 	while (get_next_line(fd, &line))
 		*(char **)ft_varypush(file) = line;
 	close(fd);
-	parse(fdf, file->buff);
+	parse(fdf, file->buff, NULL);
 	ft_varydel(&file, vdtor, E_FILE);
 }

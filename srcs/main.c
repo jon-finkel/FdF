@@ -6,21 +6,23 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/04 21:18:50 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 00:09:39 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void			fdf_init(t_fdf *fdf, double scale)
+static void			fdf_init(t_fdf *fdf)
 {
 	t_m4		ms;
 	t_m4		mx;
 	t_m4		mz;
 
+	fdf->trans_speed = 5;
+	fdf->zoom = WIN_Y / MAX(fdf->width, fdf->height);
 	mx = ft_m4rotx(M_PI / 4);
 	mz = ft_m4rotz(M_PI / 4);
-	ms = ft_m4scale(scale, scale, scale);
+	ms = ft_m4scale(fdf->zoom, fdf->zoom, fdf->zoom);
 	ft_veciter(fdf->vec, mz, fdf->size);
 	ft_veciter(fdf->vec, mx, fdf->size);
 	ft_veciter(fdf->vec, ms, fdf->size);
@@ -51,15 +53,17 @@ void				output(t_mlx *mlx, const t_fdf fdf)
 		if (k % fdf.width)
 		{
 			v = *fdf.vec[k - 1];
-			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], 0xffffff);
+			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], fdf.psych ? rand() : INT_MAX);
 		}
 		if (k - fdf.width >= 0)
 		{
 			v = *fdf.vec[k - fdf.width];
-			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], 0xffffff);
+			ftx_drawline(_MLX_IMG, v, *fdf.vec[k], fdf.psych ? rand() : INT_MAX);
 		}
 	}
 	mlx_put_image_to_window(_MLX_ID, _MLX_WIN_ID, _MLX_IMG_ID, 0, 0);
+	if (!fdf.debug)
+		output_debug(mlx, fdf);
 }
 
 static void			cinematic(t_fdf *fdf)
@@ -88,7 +92,7 @@ int					main(int argc, const char *argv[])
 	ftx_init(&fdf.mlx);
 	ftx_winctor(&fdf.mlx, WIN_X, WIN_Y, WIN_TITLE);
 	ftx_imgctor(&fdf.mlx, WIN_X, WIN_Y);
-	fdf_init(&fdf, WIN_Y / MAX(fdf.width, fdf.height));
+	fdf_init(&fdf);
 	key_hook(0, &fdf);
 	mlx_hook(fdf.mlx.win[0], 2, X_KEYPRESS_MASK, (int(*)())key_hook, &fdf);
 	mlx_loop_hook(fdf.mlx.mlx, (int (*)())cinematic, &fdf);
