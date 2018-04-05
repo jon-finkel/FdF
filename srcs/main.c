@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 16:49:31 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 17:22:59 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void			fdf_init(t_fdf *fdf)
 
 	fdf->move_speed = 5;
 	fdf->zoom = WIN_Y / MAX(fdf->width, fdf->height);
-	mx = ft_m4rotx(M_PI / 4);
 	mz = ft_m4rotz(M_PI / 4);
+	mx = ft_m4rotx(M_PI / 4);
 	ms = ft_m4scale(fdf->zoom, fdf->zoom, fdf->zoom);
 	ft_veciter(fdf->vec, mz, fdf->size);
 	ft_veciter(fdf->vec, mx, fdf->size);

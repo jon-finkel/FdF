@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 16:48:50 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 17:24:23 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ typedef struct		s_fdf
 	bool			cinema;
 	bool			psy;
 	double			zoom;
-	short			rot_x;
-	short			rot_y;
-	short			rot_z;
-	short			spd_x;
-	short			spd_y;
-	short			spd_z;
-	short			height;
-	short			width;
+	uint16_t		rot_x;
+	uint16_t		rot_y;
+	uint16_t		rot_z;
+	int16_t			spd_x;
+	int16_t			spd_y;
+	int16_t			spd_z;
+	int16_t			height;
+	int16_t			width;
 	size_t			size;
 	t_mlx			*mlx;
 	t_p2			origin;

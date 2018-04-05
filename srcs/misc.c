@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 10:57:20 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 16:53:50 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 17:17:06 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void				output_data(const t_mlx *mlx, const t_fdf fdf)
 	ft_snprintf(data, BUFF_SIZE, " MvSpd : %hhu", fdf.move_speed);
 	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 60, _WHITE, data);
 	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 75, _WHITE, " ---- ROT ----");
-	ft_snprintf(data, BUFF_SIZE, " Rot X : %hhd", fdf.rot_x);
+	ft_snprintf(data, BUFF_SIZE, " Rot X : %hd", fdf.rot_x);
 	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 90, _WHITE, data);
-	ft_snprintf(data, BUFF_SIZE, " Rot Y : %hhd", fdf.rot_y);
+	ft_snprintf(data, BUFF_SIZE, " Rot Y : %hd", fdf.rot_y);
 	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 105, _WHITE, data);
-	ft_snprintf(data, BUFF_SIZE, " Rot Z : %hhd", fdf.rot_z);
+	ft_snprintf(data, BUFF_SIZE, " Rot Z : %hd", fdf.rot_z);
 	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 120, _WHITE, data);
 	if (fdf.psy)
 		mlx_string_put(_MLX_ID, _MLX_WIN_ID, _PSY, 0, rand(), "PSYCH MODE ON!");
