@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 01:36:31 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 13:49:52 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,24 @@
 # define WIN_X 1200
 # define WIN_Y 900
 # define WIN_TITLE "FdF - A wireframe renderer, by Jon Finkel"
-# define _DEBUG_COLOR 0xffffffff
+# define _WHITE 0xffffffff
 
 typedef enum		e_flag
 {
+	E_BLUR,
+	E_CLIP,
 	E_FILE,
 	E_VARY
 }					t_flag;
 
+typedef struct		s_data
+{
+
+}					t_data;
+
 typedef struct		s_fdf
 {
 	bool			cinema;
-	bool			debug;
 	bool			psy;
 	double			zoom;
 	short			c_x;
@@ -40,7 +46,8 @@ typedef struct		s_fdf
 	short			height;
 	short			width;
 	size_t			size;
-	t_mlx			mlx;
+	t_data			*data;
+	t_mlx			*mlx;
 	t_vec4			*origin;
 	t_vec4			*pos;
 	t_vec4			**vec;
@@ -49,9 +56,9 @@ typedef struct		s_fdf
 
 _Noreturn void		fdf_errhdl(const char *line, int y);
 void				get_data(t_fdf *fdf, const int fd);
-void				key_hook(int key, t_fdf *fdf);
-void				output(t_mlx *mlx, const t_fdf fdf);
-void				output_debug(const t_mlx *mlx, const t_fdf fdf);
+int					key_hook(int key, t_fdf *fdf);
+void				output(t_mlx *mlx, const t_fdf fdf, const t_flag flag);
+void				output_data(const t_mlx *mlx, const t_fdf fdf);
 void				terminate(t_fdf *fdf);
 void				vdtor(void *data, va_list ap);
 

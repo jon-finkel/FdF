@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 12:50:38 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/04 22:27:16 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 13:44:55 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void				terminate(t_fdf *fdf)
 	ft_varydel(&g_vary, vdtor, E_VARY);
 	ft_memdel((void **)&fdf->origin);
 	ft_memdel((void **)&fdf->pos);
-	ftx_mlxdtor(&fdf->mlx);
+	ftx_mlxdtor(fdf->mlx);
 	exit(EXIT_SUCCESS);
 }
 

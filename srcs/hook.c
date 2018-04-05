@@ -6,12 +6,11 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 13:17:30 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 01:36:44 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 14:08:53 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#define _5D_MODE 5
 #define _ZOOM_MAX 909999
 
 static void			cinema(t_fdf *fdf, const int key)
@@ -36,11 +35,6 @@ static void			cinema(t_fdf *fdf, const int key)
 		fdf->c_y = 1;
 	else if (key == X_KEY_9)
 		fdf->c_z = 1;
-	else if (key == X_KEY_BACKTICK && (fdf->c_x = _5D_MODE))
-	{
-		fdf->c_y = _5D_MODE;
-		fdf->c_z = _5D_MODE;
-	}
 }
 
 static void			spin(t_vec4 **avec, const t_fdf fdf, const int key)
@@ -73,15 +67,15 @@ static void			move(t_fdf *fdf, const int key, const int value)
 
 static void			transfo(t_fdf *fdf, t_mlx *mlx, int key, uint8_t value)
 {
-	ftx_veccenter(fdf->vec, fdf->size, *fdf->origin);
+	ft_veccenter(fdf->vec, fdf->size, *fdf->origin);
 	if ((key >= X_KEY_A && key <= X_KEY_D) || key == X_KEY_W)
 		move(fdf, key, value);
-	else if (key == X_KEY_Q && fdf->zoom > 0.1)
+	else if (key == X_KEY_MINUS && fdf->zoom > 0.1)
 	{
 		fdf->zoom *= 0.9f;
 		ft_veciter(fdf->vec, ft_m4scale(0.9f, 0.9f, 0.9f), fdf->size);
 	}
-	else if (key == X_KEY_E && fdf->zoom < _ZOOM_MAX)
+	else if (key == X_KEY_EQUAL && fdf->zoom < _ZOOM_MAX)
 	{
 		fdf->zoom *= 1.1f;
 		ft_veciter(fdf->vec, ft_m4scale(1.1f, 1.1f, 1.1f), fdf->size);
@@ -95,22 +89,34 @@ static void			transfo(t_fdf *fdf, t_mlx *mlx, int key, uint8_t value)
 	}
 	else
 		spin(fdf->vec, *fdf, key);
-	ftx_veccenter(fdf->vec, fdf->size, *fdf->pos);
+	ft_veccenter(fdf->vec, fdf->size, *fdf->pos);
 }
 
-void				key_hook(int key, t_fdf *fdf)
+int					key_hook(int key, t_fdf *fdf)
 {
 	if (key == X_KEY_ESCAPE)
 		terminate(fdf);
-	else if (key == X_KEY_TAB && fdf->trans_speed > 5)
-		fdf->trans_speed -= 5;
-	else if (key == X_KEY_R && fdf->trans_speed < UCHAR_MAX)
-		fdf->trans_speed += 5;
-	else if ((key >= X_KEY_1 && key <= X_KEY_0) || key == X_KEY_BACKTICK)
+	else if ((key == X_KEY_Q && fdf->trans_speed > 5)
+		|| (key == X_KEY_E && fdf->trans_speed < UINT8_MAX))
+	{
+		fdf->trans_speed += (key == X_KEY_Q ? -5 : 5);
+		output(fdf->mlx, *fdf, E_CLIP);
+	}
+	else if (key >= X_KEY_1 && key <= X_KEY_0 && key != X_KEY_EQUAL
+		&& key != X_KEY_MINUS)
+	{
 		cinema(fdf, key);
+		output(fdf->mlx, *fdf, E_CLIP);
+	}
 	else if (key == X_KEY_L_ALT)
+	{
 		fdf->psy = (fdf->psy ? false : true);
+		output(fdf->mlx, *fdf, E_CLIP);
+	}
 	else
-		transfo(fdf, &fdf->mlx, key, fdf->trans_speed);
-	output(&fdf->mlx, *fdf);
+	{
+		transfo(fdf, fdf->mlx, key, fdf->trans_speed);
+		output(fdf->mlx, *fdf, E_BLUR);
+	}
+	KTHXBYE;
 }
