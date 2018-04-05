@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 13:17:30 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 17:27:16 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 22:33:32 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,18 @@ static void			cinema(t_fdf *fdf, const int key)
 
 static void			spin(t_vec4 **avec, t_fdf *fdf, const int key)
 {
-	if (key == X_KEY_U_ARROW || key == X_KEY_D_ARROW)
-	{
-		ft_veciter(avec, ft_m4rotx(M_PI / (key == 125 ? -60 : 60)), fdf->size);
-		if (key == X_KEY_D_ARROW)
-			fdf->rot_x -= (!fdf->rot_x ? -360 : 3);
-		else
-			fdf->rot_x += (fdf->rot_x == 360 ? -360 : 3);
-	}
-	else if (key == X_KEY_L_ARROW || key == X_KEY_R_ARROW)
-	{
-		ft_veciter(avec, ft_m4roty(M_PI / (key == 123 ? -60 : 60)), fdf->size);
-		if (key == X_KEY_L_ARROW)
-			fdf->rot_y -= (!fdf->rot_y ? -360 : 3);
-		else
-			fdf->rot_y += (fdf->rot_y == 360 ? -360 : 3);
-	}
-	else if (key == X_KEY_Z || key == X_KEY_C)
-	{
-		ft_veciter(avec, ft_m4rotz(M_PI / (key == 6 ? -60 : 60)), fdf->size);
-		if (key == X_KEY_Z)
-			fdf->rot_z -= (!fdf->rot_z ? -360 : 3);
-		else
-			fdf->rot_z += (fdf->rot_z == 360 ? -360 : 3);
-	}
+	if (key == X_KEY_U_ARROW)
+		ft_veciter(avec, ft_m4rotx(M_PI / 60), fdf->size);
+	else if (key == X_KEY_D_ARROW)
+		ft_veciter(avec, ft_m4rotx(M_PI / -60), fdf->size);
+	else if (key == X_KEY_R_ARROW)
+		ft_veciter(avec, ft_m4roty(M_PI / 60), fdf->size);
+	else if (key == X_KEY_L_ARROW)
+		ft_veciter(avec, ft_m4roty(M_PI / -60), fdf->size);
+	else if (key == X_KEY_C)
+		ft_veciter(avec, ft_m4rotz(M_PI / 60), fdf->size);
+	else if (key == X_KEY_Z)
+		ft_veciter(avec, ft_m4rotz(M_PI / -60), fdf->size);
 }
 
 static void			move(t_fdf *fdf, const int key, const int value)

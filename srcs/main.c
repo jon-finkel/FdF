@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 17:22:59 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 22:30:50 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ static void			fdf_init(t_fdf *fdf)
 	ft_veciter(fdf->vec, mz, fdf->size);
 	ft_veciter(fdf->vec, mx, fdf->size);
 	ft_veciter(fdf->vec, ms, fdf->size);
-	fdf->rot_x = 45;
-	fdf->rot_y = 0;
-	fdf->rot_z = 45;
 	fdf->spd_x = 180;
 	fdf->spd_y = 180;
 	fdf->spd_z = 180;

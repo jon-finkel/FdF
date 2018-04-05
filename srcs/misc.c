@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 10:57:20 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 17:17:06 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 22:30:34 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ static void			output_cinema_data(const t_mlx *mlx, const t_fdf fdf)
 {
 	char		data[BUFF_SIZE];
 
-	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 135, _WHITE, " ---- CIN ----");
+	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 75, _WHITE, " ---- CIN ----");
 	ft_snprintf(data, BUFF_SIZE, " Spd X : %.2f", (fdf.spd_x == 1 ? 0\
 		: 360.0 / fdf.spd_x));
-	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 150, _WHITE, data);
+	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 90, _WHITE, data);
 	ft_snprintf(data, BUFF_SIZE, " Spd Y : %.2f", (fdf.spd_y == 1 ? 0\
 		: 360.0 / fdf.spd_y));
-	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 165, _WHITE, data);
+	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 105, _WHITE, data);
 	ft_snprintf(data, BUFF_SIZE, " Spd Z : %.2f", (fdf.spd_z == 1 ? 0\
 		: 360.0 / fdf.spd_z));
-	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 180, _WHITE, data);
+	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 120, _WHITE, data);
 }
 
 void				output_data(const t_mlx *mlx, const t_fdf fdf)
@@ -52,13 +52,6 @@ void				output_data(const t_mlx *mlx, const t_fdf fdf)
 	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 45, _WHITE, data);
 	ft_snprintf(data, BUFF_SIZE, " MvSpd : %hhu", fdf.move_speed);
 	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 60, _WHITE, data);
-	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 75, _WHITE, " ---- ROT ----");
-	ft_snprintf(data, BUFF_SIZE, " Rot X : %hd", fdf.rot_x);
-	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 90, _WHITE, data);
-	ft_snprintf(data, BUFF_SIZE, " Rot Y : %hd", fdf.rot_y);
-	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 105, _WHITE, data);
-	ft_snprintf(data, BUFF_SIZE, " Rot Z : %hd", fdf.rot_z);
-	mlx_string_put(_MLX_ID, _MLX_WIN_ID, 0, 120, _WHITE, data);
 	if (fdf.psy)
 		mlx_string_put(_MLX_ID, _MLX_WIN_ID, _PSY, 0, rand(), "PSYCH MODE ON!");
 	if (fdf.cinema)
