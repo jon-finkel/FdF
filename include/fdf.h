@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 13:49:52 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 16:48:50 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,41 +25,36 @@
 typedef enum		e_flag
 {
 	E_BLUR,
-	E_CLIP,
-	E_FILE,
-	E_VARY
+	E_CLIP
 }					t_flag;
-
-typedef struct		s_data
-{
-
-}					t_data;
 
 typedef struct		s_fdf
 {
 	bool			cinema;
 	bool			psy;
 	double			zoom;
-	short			c_x;
-	short			c_y;
-	short			c_z;
+	short			rot_x;
+	short			rot_y;
+	short			rot_z;
+	short			spd_x;
+	short			spd_y;
+	short			spd_z;
 	short			height;
 	short			width;
 	size_t			size;
-	t_data			*data;
 	t_mlx			*mlx;
-	t_vec4			*origin;
-	t_vec4			*pos;
+	t_p2			origin;
+	t_p2			pos;
 	t_vec4			**vec;
-	uint8_t			trans_speed;
+	uint8_t			move_speed;
 }					t_fdf;
 
-_Noreturn void		fdf_errhdl(const char *line, int y);
+void				fdf_errhdl(const char *line, const int y);
 void				get_data(t_fdf *fdf, const int fd);
 int					key_hook(int key, t_fdf *fdf);
 void				output(t_mlx *mlx, const t_fdf fdf, const t_flag flag);
 void				output_data(const t_mlx *mlx, const t_fdf fdf);
 void				terminate(t_fdf *fdf);
-void				vdtor(void *data, va_list ap);
+void				vdtor(void *data);
 
 #endif

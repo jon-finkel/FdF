@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 13:17:30 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 14:08:53 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/05 16:46:29 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,23 @@ static void			cinema(t_fdf *fdf, const int key)
 	if (key == X_KEY_0)
 		fdf->cinema = (fdf->cinema ? false : true);
 	else if (key == X_KEY_1)
-		fdf->c_x += (fdf->c_x == 1 ? 179 : 5);
-	else if (key == X_KEY_2 && (fdf->c_x > 5 || fdf->c_x == 1))
-		fdf->c_x -= (fdf->c_x == 1 ? -179 : 5);
+		fdf->spd_x += (fdf->spd_x == 1 ? 179 : 5);
+	else if (key == X_KEY_2 && (fdf->spd_x > 5 || fdf->spd_x == 1))
+		fdf->spd_x -= (fdf->spd_x == 1 ? -179 : 5);
 	else if (key == X_KEY_3)
-		fdf->c_y += (fdf->c_y == 1 ? 179 : 5);
-	else if (key == X_KEY_4 && (fdf->c_y > 5 || fdf->c_y == 1))
-		fdf->c_y -= (fdf->c_y == 1 ? -179 : 5);
+		fdf->spd_y += (fdf->spd_y == 1 ? 179 : 5);
+	else if (key == X_KEY_4 && (fdf->spd_y > 5 || fdf->spd_y == 1))
+		fdf->spd_y -= (fdf->spd_y == 1 ? -179 : 5);
 	else if (key == X_KEY_5)
-		fdf->c_z += (fdf->c_z == 1 ? 179 : 5);
-	else if (key == X_KEY_6 && (fdf->c_z > 5 || fdf->c_z == 1))
-		fdf->c_z -= (fdf->c_z == 1 ? -179 : 5);
+		fdf->spd_z += (fdf->spd_z == 1 ? 179 : 5);
+	else if (key == X_KEY_6 && (fdf->spd_z > 5 || fdf->spd_z == 1))
+		fdf->spd_z -= (fdf->spd_z == 1 ? -179 : 5);
 	else if (key == X_KEY_7)
-		fdf->c_x = 1;
+		fdf->spd_x = 1;
 	else if (key == X_KEY_8)
-		fdf->c_y = 1;
+		fdf->spd_y = 1;
 	else if (key == X_KEY_9)
-		fdf->c_z = 1;
+		fdf->spd_z = 1;
 }
 
 static void			spin(t_vec4 **avec, const t_fdf fdf, const int key)
@@ -56,18 +56,18 @@ static void			spin(t_vec4 **avec, const t_fdf fdf, const int key)
 static void			move(t_fdf *fdf, const int key, const int value)
 {
 	if (key == X_KEY_A)
-		fdf->pos->x -= value;
+		fdf->pos.x -= value;
 	else if (key == X_KEY_D)
-		fdf->pos->x += value;
+		fdf->pos.x += value;
 	else if (key == X_KEY_W)
-		fdf->pos->y -= value;
+		fdf->pos.y -= value;
 	else if (key == X_KEY_S)
-		fdf->pos->y += value;
+		fdf->pos.y += value;
 }
 
 static void			transfo(t_fdf *fdf, t_mlx *mlx, int key, uint8_t value)
 {
-	ft_veccenter(fdf->vec, fdf->size, *fdf->origin);
+	ft_veccenter(fdf->vec, fdf->size, fdf->origin);
 	if ((key >= X_KEY_A && key <= X_KEY_D) || key == X_KEY_W)
 		move(fdf, key, value);
 	else if (key == X_KEY_MINUS && fdf->zoom > 0.1)
@@ -84,22 +84,22 @@ static void			transfo(t_fdf *fdf, t_mlx *mlx, int key, uint8_t value)
 	{
 		ftx_clearimg(_MLX_IMG);
 		mlx_put_image_to_window(_MLX_ID, _MLX_WIN_ID, _MLX_IMG_ID, 0, 0);
-		fdf->pos->x = WIN_X / 2;
-		fdf->pos->y = WIN_Y / 2;
+		fdf->pos.x = WIN_X / 2;
+		fdf->pos.y = WIN_Y / 2;
 	}
 	else
 		spin(fdf->vec, *fdf, key);
-	ft_veccenter(fdf->vec, fdf->size, *fdf->pos);
+	ft_veccenter(fdf->vec, fdf->size, fdf->pos);
 }
 
 int					key_hook(int key, t_fdf *fdf)
 {
 	if (key == X_KEY_ESCAPE)
 		terminate(fdf);
-	else if ((key == X_KEY_Q && fdf->trans_speed > 5)
-		|| (key == X_KEY_E && fdf->trans_speed < UINT8_MAX))
+	else if ((key == X_KEY_Q && fdf->move_speed > 5)
+		|| (key == X_KEY_E && fdf->move_speed < UINT8_MAX))
 	{
-		fdf->trans_speed += (key == X_KEY_Q ? -5 : 5);
+		fdf->move_speed += (key == X_KEY_Q ? -5 : 5);
 		output(fdf->mlx, *fdf, E_CLIP);
 	}
 	else if (key >= X_KEY_1 && key <= X_KEY_0 && key != X_KEY_EQUAL
@@ -115,7 +115,7 @@ int					key_hook(int key, t_fdf *fdf)
 	}
 	else
 	{
-		transfo(fdf, fdf->mlx, key, fdf->trans_speed);
+		transfo(fdf, fdf->mlx, key, fdf->move_speed);
 		output(fdf->mlx, *fdf, E_BLUR);
 	}
 	KTHXBYE;
