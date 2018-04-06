@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:35:11 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 22:30:40 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/06 15:43:19 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 # define WIN_X 1200
 # define WIN_Y 900
-# define WIN_TITLE "FdF - A wireframe renderer, by Jon Finkel"
 # define _WHITE 0xffffffff
 
 typedef enum		e_flag
@@ -47,7 +46,7 @@ typedef struct		s_fdf
 }					t_fdf;
 
 void				fdf_errhdl(const char *line, const int y);
-void				get_data(t_fdf *fdf, const int fd);
+char				*get_data(t_fdf *fdf, const char *map);
 int					key_hook(int key, t_fdf *fdf);
 void				output(t_mlx *mlx, const t_fdf fdf, const t_flag flag);
 void				output_data(const t_mlx *mlx, const t_fdf fdf);

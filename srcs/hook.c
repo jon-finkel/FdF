@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 13:17:30 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 22:33:32 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/06 15:46:59 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,17 @@ static void			cinema(t_fdf *fdf, const int key)
 static void			spin(t_vec4 **avec, t_fdf *fdf, const int key)
 {
 	if (key == X_KEY_U_ARROW)
-		ft_veciter(avec, ft_m4rotx(M_PI / 60), fdf->size);
+		ft_veciter(avec, ft_m4rotx(M_PI / 45), fdf->size);
 	else if (key == X_KEY_D_ARROW)
-		ft_veciter(avec, ft_m4rotx(M_PI / -60), fdf->size);
+		ft_veciter(avec, ft_m4rotx(M_PI / -45), fdf->size);
 	else if (key == X_KEY_R_ARROW)
-		ft_veciter(avec, ft_m4roty(M_PI / 60), fdf->size);
+		ft_veciter(avec, ft_m4roty(M_PI / 45), fdf->size);
 	else if (key == X_KEY_L_ARROW)
-		ft_veciter(avec, ft_m4roty(M_PI / -60), fdf->size);
+		ft_veciter(avec, ft_m4roty(M_PI / -45), fdf->size);
 	else if (key == X_KEY_C)
-		ft_veciter(avec, ft_m4rotz(M_PI / 60), fdf->size);
+		ft_veciter(avec, ft_m4rotz(M_PI / 45), fdf->size);
 	else if (key == X_KEY_Z)
-		ft_veciter(avec, ft_m4rotz(M_PI / -60), fdf->size);
+		ft_veciter(avec, ft_m4rotz(M_PI / -45), fdf->size);
 }
 
 static void			move(t_fdf *fdf, const int key, const int value)

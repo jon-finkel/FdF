@@ -6,11 +6,12 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 23:24:23 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 22:30:50 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/06 15:42:38 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#define BUFF_SIZE (128)
 #define _USAGE "usage: ./fdf <file>\n"
 
 static void			fdf_init(t_fdf *fdf)
@@ -75,16 +76,20 @@ static int			cinematic(t_fdf *fdf)
 
 int					main(int argc, const char *argv[])
 {
+	char		title[BUFF_SIZE];
+	char		*map_name;
 	t_fdf		fdf;
 	t_mlx		mlx;
 
 	if (argc != 2 && ft_printf(_USAGE))
 		KTHXBYE;
 	ft_memset(&fdf, '\0', sizeof(t_fdf));
-	get_data(&fdf, open(argv[1], O_RDONLY));
+	map_name = get_data(&fdf, argv[1]);
 	fdf_init(&fdf);
 	fdf.mlx = ftx_init(&mlx);
-	ftx_winctor(fdf.mlx, WIN_X, WIN_Y, WIN_TITLE);
+	ft_snprintf(title, BUFF_SIZE, "FdF, by Jon Finkel - map: %s", map_name);
+	ft_strdel(&map_name);
+	ftx_winctor(fdf.mlx, WIN_X, WIN_Y, title);
 	ftx_imgctor(fdf.mlx, WIN_X, WIN_Y);
 	key_hook(X_KEY_SPACE, &fdf);
 	mlx_hook(fdf.mlx->win[0], X_KEYPRESS, X_KEYPRESS_MASK, key_hook, &fdf);

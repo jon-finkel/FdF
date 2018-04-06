@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 12:50:38 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/05 16:44:17 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/06 15:45:10 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,13 @@ static void			parse(t_fdf *fdf, char *line, const int y)
 	fdf->width = MAX(fdf->width, x);
 }
 
-void				get_data(t_fdf *fdf, const int fd)
+char				*get_data(t_fdf *fdf, const char *map)
 {
 	char		*line;
+	int			fd;
 	int			y;
 
-	if (fd < 0)
+	if ((fd = open(map, O_RDONLY)) < 0)
 		ft_errhdl(NULL, 0, (int)ERR_OPEN);
 	y = -1;
 	while (get_next_line(fd, &line) && line)
@@ -67,4 +68,5 @@ void				get_data(t_fdf *fdf, const int fd)
 	close(fd);
 	fdf->height = y;
 	fdf->vec = g_vary->buff;
+	GIMME(ft_strdup((line = ft_strrchr(map, '/')) ? line + 1 : map));
 }
