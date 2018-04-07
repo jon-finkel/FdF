@@ -6,7 +6,7 @@
 /*   By: nfinkel <nfinkel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 12:50:38 by nfinkel           #+#    #+#             */
-/*   Updated: 2018/04/07 11:27:16 by nfinkel          ###   ########.fr       */
+/*   Updated: 2018/04/07 12:03:08 by nfinkel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char				*get_data(t_fdf *fdf, const char *map)
 	int			y;
 
 	if ((fd = open(map, O_RDONLY)) < 0)
-		ft_errhdl(NULL, 0, (int)ERR_OPEN);
+		ft_errhdl(NULL, 0, errno, ERR_NO);
 	y = -1;
 	while (get_next_line(fd, &line))
 	{
