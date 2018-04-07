@@ -23,20 +23,20 @@ A 3D wireframe rendering engine.
 - Cinema mode
 
 Controls:
-`+`: zoom in
-`-`: zoom out
-`A/S/D/W`: move left / down / right / up
-`E`: increase move speed
-`Q`: decrease move speed
-`^/v`: rotation on X-axis
-`</>`: rotation on Y-axis
-`Z/C`: rotation on Z-axis
-`0`: enable / disable cinema mode
-`1/2`: decrease / increase X-axis rotation speed for cinema mode
-`3/4`: decrease / increase Y-axis rotation speed for cinema mode
-`5/6`: decrease / increase Z-axis rotation speed for cinema mode
-`7/8/9`: stop rotation on X/Y/Z-axis for cinema mode
-`alt`: enable / disable psych mode
+- `+`: zoom in
+- `-`: zoom out
+- `A/S/D/W`: move left / down / right / up
+- `E`: increase move speed
+- `Q`: decrease move speed
+- `^/v`: rotation on X-axis
+- `</>`: rotation on Y-axis
+- `Z/C`: rotation on Z-axis
+- `0`: enable / disable cinema mode
+- `1/2`: decrease / increase X-axis rotation speed for cinema mode
+- `3/4`: decrease / increase Y-axis rotation speed for cinema mode
+- `5/6`: decrease / increase Z-axis rotation speed for cinema mode
+- `7/8/9`: stop rotation on X/Y/Z-axis for cinema mode
+- `alt`: enable / disable psych mode
 
 ### Final Mark
 
