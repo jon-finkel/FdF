@@ -1,4 +1,4 @@
-# FdF - @42Born2Code
+# FDF - @42Born2Code
 
 A 3D wireframe rendering engine.
 
